@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Array;
+
 
 public class Main extends Application {
 
@@ -25,6 +27,9 @@ public class Main extends Application {
 
     // View of the scene
     private Node view;
+
+    // The array to be sorted
+    private Element[] elementList;
 
     // Initial set up as main
     public static void main(String[] args) {
@@ -63,7 +68,10 @@ public class Main extends Application {
         // Not that panes allow for absolute positioning
         Pane sortSection = new Pane();
 
-        // Add all children elements to sort section (colored bars)
+        // update all children elements to sort section (colored bars)
+        for(int i = 0; i < elementList.length; ++i) {
+            sortSection.getChildren().add(elementList[i].getBody());
+        }
 
         // Combine both HBox's into one Vertical box
         root.getChildren().add(actionSection);
@@ -75,9 +83,12 @@ public class Main extends Application {
 
     // Start the JavaFX Application
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         // Name of the window
         stage.setTitle("Capstone FunSort");
+
+        // Create list of elements to sort
+        elementList = ArrayInitializer.initialize(numElements, windowWidth, windowHeight);
 
         // Draw the scene to the stage
         stage.setScene(new Scene(createLayout()));
