@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 
 
@@ -20,7 +21,7 @@ public class Main extends Application {
     private final int windowWidth = 1530;
 
     // Number of colored bars to sort
-    private int numElements = 10;
+    private int numElements = 1530;
 
     // Main root of the scene as a Vertical Box
     private VBox root;
@@ -51,7 +52,12 @@ public class Main extends Application {
         /* Shuffle */
         Button shuffleButton = new Button("Shuffle");
         // Set the shuffle button action
-        //shuffleButton.setOnAction();
+        shuffleButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Sorter.shuffle(elementList);
+            }
+        });
 
         /* Bubble Sort */
         Button bubbleSort = new Button("Bubble Sort");

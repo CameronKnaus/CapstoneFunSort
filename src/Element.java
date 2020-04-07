@@ -29,6 +29,9 @@ public class Element {
         body.setLayoutX(givenWeight * bodyWidth);
     }
 
+    // Setters
+    public void setWeight(int given) {weight = given;}
+
     // Set the color of the body of the element based on a given RGB value
     public void setColor(Color givenColor) {
         body.setFill(givenColor);
@@ -36,5 +39,6 @@ public class Element {
 
     // Getters
     public Rectangle getBody() {return body;}
+    public int getWeight() {return weight;}
 
 }
