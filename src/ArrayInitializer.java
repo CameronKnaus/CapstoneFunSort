@@ -16,9 +16,10 @@ public class ArrayInitializer {
         // Calculate the width for the elements
         int width = displayWidth / numberOfElements;
 
+        // Helper class for generating the colors of the rainbow
+        ColorGenerator generator = new ColorGenerator(numberOfElements);
+
         for(int i = 0; i < numberOfElements; ++i) {
-            // Helper class for generating the colors of the rainbow
-            ColorGenerator generator = new ColorGenerator(numberOfElements);
 
             // Provide the weight to the element
             elementList[i] = new Element(i, width, displayHeight);
