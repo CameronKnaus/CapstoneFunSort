@@ -32,6 +32,9 @@ public class Main extends Application {
     // The array to be sorted
     private Element[] elementList;
 
+    // Create a horizontal section (pane) for the sorting window (holds the elementList)
+    private Pane sortSection;
+
     // Initial set up as main
     public static void main(String[] args) {
         // Connect to StyleSheet
@@ -55,7 +58,8 @@ public class Main extends Application {
         shuffleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter.shuffle(elementList);
+                Sorter sorter = new Sorter(elementList, sortSection);
+                sorter.shuffle();
             }
         });
 
@@ -71,8 +75,8 @@ public class Main extends Application {
         HBox actionSection = new HBox(shuffleButton, bubbleSort);
 
         // Create a horizontal section (pane) for the sorting window
-        // Not that panes allow for absolute positioning
-        Pane sortSection = new Pane();
+        // Note that panes allow for absolute positioning
+        sortSection = new Pane();
 
         // update all children elements to sort section (colored bars)
         for(int i = 0; i < elementList.length; ++i) {
