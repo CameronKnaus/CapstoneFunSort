@@ -58,7 +58,7 @@ public class Main extends Application {
         shuffleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection);
+                Sorter sorter = new Sorter(elementList, sortSection, 5);
                 sorter.shuffle();
             }
         });
@@ -66,7 +66,13 @@ public class Main extends Application {
         /* Bubble Sort */
         Button bubbleSort = new Button("Bubble Sort");
         // Set the bubble sort action
-        // bubbleSort.setOnAction();
+        bubbleSort.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Sorter sorter = new Sorter(elementList, sortSection, 300);
+                sorter.bubbleSort();
+            }
+        });
 
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
