@@ -73,6 +73,27 @@ public class Sorter {
     }
 
     /**
+     * User facing function to open a new thread for insertion sort operations
+     */
+    public void insertionSort() {
+        // Create a runnable for shuffle (allows for multithreaded running)
+        Runnable task = new Runnable() {
+            public void run() {
+                runInsertionSort();
+            }
+        };
+
+        // Run the shuffle in the background thread
+        Thread backgroundThread = new Thread(task);
+
+        // Terminate the running thread if the application exits
+        backgroundThread.setDaemon(true);
+
+        // Start the thread
+        backgroundThread.start();
+    }
+
+    /**
      * Updates pane containing all elements
      */
     private void updateList() {
@@ -156,6 +177,47 @@ public class Sorter {
         catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Performs insertion sort on the element list. GUI is updated on the main thread through runLater()
+     */
+    private void runInsertionSort() {
+        // Commence insertion sort
+        try {
+            for (int i = 1; i < elementList.length; ++i) {
+                int j = i;
+                while (j > 0 && elementList[j].getWeight() < elementList[j - 1].getWeight()) {
+                    swap(j, j - 1);
+                    j -= 1;
+                }
+                // Update the GUI
+                Platform.runLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        updateList();
+                    }
+                });
+
+                // Cause the thread to sleep if a swap was executed
+                Thread.sleep(swapTime);
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // One last GUI update to ensure all elements are accurately in place
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                updateList();
+            }
+        });
     }
 
     /**

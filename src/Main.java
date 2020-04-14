@@ -21,7 +21,7 @@ public class Main extends Application {
     private final int windowWidth = 1530;
 
     // Number of colored bars to sort
-    private int numElements = 30;
+    private int numElements = 500;
 
     // Main root of the scene as a Vertical Box
     private VBox root;
@@ -52,8 +52,9 @@ public class Main extends Application {
 
     // Parent of all nodes with children in the scene
     private Parent createLayout() {
-        /* Shuffle */
+        /* Shuffle Button */
         Button shuffleButton = new Button("Shuffle");
+
         // Set the shuffle button action
         shuffleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -63,8 +64,9 @@ public class Main extends Application {
             }
         });
 
-        /* Bubble Sort */
+        /* Bubble Sort Button */
         Button bubbleSort = new Button("Bubble Sort");
+
         // Set the bubble sort action
         bubbleSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -74,11 +76,23 @@ public class Main extends Application {
             }
         });
 
+        /* Insertion Sort Button */
+        Button insertionSort = new Button("Insertion Sort");
+
+        // Set the insertion sort action
+        insertionSort.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Sorter sorter = new Sorter(elementList, sortSection, 100);
+                sorter.insertionSort();
+            }
+        });
+
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
 
         // Create horizontal section for buttons
-        HBox actionSection = new HBox(shuffleButton, bubbleSort);
+        HBox actionSection = new HBox(shuffleButton, bubbleSort, insertionSort);
 
         // Create a horizontal section (pane) for the sorting window
         // Note that panes allow for absolute positioning
