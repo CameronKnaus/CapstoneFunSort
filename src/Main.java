@@ -21,7 +21,7 @@ public class Main extends Application {
     private final int windowWidth = 1530;
 
     // Number of colored bars to sort
-    private int numElements = 500;
+    private int numElements = 80;
 
     // Main root of the scene as a Vertical Box
     private VBox root;
@@ -88,11 +88,23 @@ public class Main extends Application {
             }
         });
 
+        /* Insertion Sort Button */
+        Button mergeSort = new Button("Merge Sort");
+
+        // Set the insertion sort action
+        mergeSort.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Sorter sorter = new Sorter(elementList, sortSection, 15);
+                sorter.mergeSort();
+            }
+        });
+
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
 
         // Create horizontal section for buttons
-        HBox actionSection = new HBox(shuffleButton, bubbleSort, insertionSort);
+        HBox actionSection = new HBox(shuffleButton, bubbleSort, insertionSort, mergeSort);
 
         // Create a horizontal section (pane) for the sorting window
         // Note that panes allow for absolute positioning

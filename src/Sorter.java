@@ -94,6 +94,27 @@ public class Sorter {
     }
 
     /**
+     * User facing function to open a new thread for merge sort operations
+     */
+    public void mergeSort() {
+        // Create a runnable for shuffle (allows for multithreaded running)
+        Runnable task = new Runnable() {
+            public void run() {
+                runMergeSort(0, elementList.length - 1);
+            }
+        };
+
+        // Run the shuffle in the background thread
+        Thread backgroundThread = new Thread(task);
+
+        // Terminate the running thread if the application exits
+        backgroundThread.setDaemon(true);
+
+        // Start the thread
+        backgroundThread.start();
+    }
+
+    /**
      * Updates pane containing all elements
      */
     private void updateList() {
@@ -104,6 +125,35 @@ public class Sorter {
         for (int i = 0; i < elementList.length; ++i) {
             sortSection.getChildren().add(elementList[i].getBody());
         }
+    }
+
+    /**
+     * Updates pane containing all elements
+     */
+    private void updateGUI() {
+        try {
+            Platform.runLater(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    // Clear current elements
+                    sortSection.getChildren().clear();
+
+                    // update all children elements to sort section (colored bars)
+                    for (int i = 0; i < elementList.length; ++i) {
+                        sortSection.getChildren().add(elementList[i].getBody());
+                    }
+                }
+            });
+
+            // Cause the thread to sleep if a swap was executed
+            Thread.sleep(swapTime);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -218,6 +268,90 @@ public class Sorter {
                 updateList();
             }
         });
+    }
+
+    /**
+     * Performs merge sort on the element list. GUI is updated on the main thread through runLater()
+     * Note that this is the in-place representation of Merge Sort
+     * @param left The left index of the sub array to be sorted
+     * @param right The right index of the sub array to be sorted
+     */
+    private void runMergeSort(int left, int right) {
+        // Commence merge sort
+        if (left < right) {
+            int middle = left + (right - left) / 2;
+
+            // Sort first and second halves
+            runMergeSort(left, middle);
+            runMergeSort(middle + 1, right);
+
+            merge(left, middle, right);
+        }
+    }
+
+    /**
+     * Helper function that merges the pieces of merge sort
+     * @param start The starting point of the sub array
+     * @param mid The mid point of the sub array
+     * @param end The end point of the sub array
+     */
+    private void merge(int start, int mid, int end) {
+        try {
+            int start2 = mid + 1;
+
+            // If the direct merge is already sorted
+            if (elementList[mid].getWeight() <= elementList[start2].getWeight()) {
+                return;
+            }
+
+            // Two pointers to maintain start of both arrays to merge
+            while (start <= mid && start2 <= end) {
+                // If element 1 is in the right place
+                if (elementList[start].getWeight() <= elementList[start2].getWeight()) {
+                    ++start;
+                } else {
+                    int index = start2;
+
+                    // Shift all the elements between element 1 and 2 right by one
+                    while (index != start) {
+                        swap(index, index - 1);
+                        --index;
+
+                        // Update the GUI
+                        Platform.runLater(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                updateList();
+                            }
+                        });
+
+                        // Cause the thread to sleep if a swap was executed
+                        Thread.sleep(swapTime);
+                    }
+
+                    // Update the GUI
+                    Platform.runLater(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            updateList();
+                        }
+                    });
+
+                    // Update all the pointers
+                    ++start;
+                    ++mid;
+                    ++start2;
+                }
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
