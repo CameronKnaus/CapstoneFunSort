@@ -30,6 +30,9 @@ public class Sorter {
         swapTime = time;
     }
 
+    /**
+     * User facing function that opens a new thread to shuffle the element list
+     */
     public void shuffle() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
@@ -48,6 +51,9 @@ public class Sorter {
         backgroundThread.start();
     }
 
+    /**
+     * User facing function to open a new thread for bubble sort operations
+     */
     public void bubbleSort() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
@@ -79,7 +85,9 @@ public class Sorter {
         }
     }
 
-    // Shuffle an array of elements
+    /**
+     * Randomly shuffles the element list. GUI is updated on the main thread through runLater()
+     */
     private void runShuffle() {
         // Shuffle based on a random number
         Random rand = new Random();
@@ -87,7 +95,7 @@ public class Sorter {
         // Randomly swap around elements
         for(int i = 0; i < elementList.length; ++i) {
             try {
-                swap(elementList, i, rand.nextInt(elementList.length));
+                swap(i, rand.nextInt(elementList.length));
                 Platform.runLater(new Runnable()
                 {
                     @Override
@@ -105,6 +113,9 @@ public class Sorter {
         }
     }
 
+    /**
+     * Performs bubble sort on the element list. GUI is updated on the main thread through runLater()
+     */
     private void runBubbleSort() {
         // Mark if the elements are sorted
         boolean unsorted = true;
@@ -118,7 +129,7 @@ public class Sorter {
                 // Loop through all elements (one 'bubble')
                 for(int i = 0; i < elementList.length - 1; ++i) {
                     if(elementList[i].getWeight() < elementList[i + 1].getWeight()) {
-                        swap(elementList, i, i+1);
+                        swap(i, i+1);
                         // Update Application thread after swap
                         Platform.runLater(new Runnable() {
                             @Override
@@ -147,8 +158,12 @@ public class Sorter {
         }
     }
 
-    // The Swap function exchanges the positions of two given elements
-    private void swap(Element[] elementList, int indexOne, int indexTwo) {
+    /**
+     * Swap performs a standard swap between two elements and handles gui shape objects' positions as well
+     * @param indexOne, the index of one element to swap
+     * @param indexTwo, the index of the other element to swap
+     */
+    private void swap(int indexOne, int indexTwo) {
         // Swap rectangle locations
         double tempPosition = elementList[indexOne].getBody().getLayoutX();
         elementList[indexOne].getBody().setLayoutX(elementList[indexTwo].getBody().getLayoutX());
