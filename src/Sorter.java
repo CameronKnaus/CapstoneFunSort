@@ -74,7 +74,7 @@ public class Sorter {
         // Randomly swap around elements
         for(int i = 0; i < elementList.length; ++i) {
             try {
-                swap(elementList[i], elementList[rand.nextInt(elementList.length)]);
+                swap(elementList, i, rand.nextInt(elementList.length));
                 Platform.runLater(new Runnable()
                 {
                     @Override
@@ -110,8 +110,8 @@ public class Sorter {
 
                 // Loop through all elements (one 'bubble')
                 for(int i = 0; i < elementList.length - 1; ++i) {
-                    if(elementList[i].getWeight() > elementList[i + 1].getWeight()) {
-                        swap(elementList[i], elementList[i+1]);
+                    if(elementList[i].getWeight() < elementList[i + 1].getWeight()) {
+                        swap(elementList, i, i+1);
                         // Update Application thread after swap
                         Platform.runLater(new Runnable() {
                             @Override
@@ -140,15 +140,15 @@ public class Sorter {
     }
 
     // The Swap function exchanges the positions of two given elements
-    private void swap(Element givenOne, Element givenTwo) {
-        // swap the two weight values
-        int temp = givenOne.getWeight();
-        givenOne.setWeight(givenTwo.getWeight());
-        givenTwo.setWeight(temp);
-
+    private void swap(Element[] elementList, int indexOne, int indexTwo) {
         // Swap rectangle locations
-        double tempPosition = givenOne.getBody().getLayoutX();
-        givenOne.getBody().setLayoutX(givenTwo.getBody().getLayoutX());
-        givenTwo.getBody().setLayoutX(tempPosition);
+        double tempPosition = elementList[indexOne].getBody().getLayoutX();
+        elementList[indexOne].getBody().setLayoutX(elementList[indexTwo].getBody().getLayoutX());
+        elementList[indexTwo].getBody().setLayoutX(tempPosition);
+
+        // Swap the elements in the array
+        Element tempElement = elementList[indexOne];
+        elementList[indexOne] = elementList[indexTwo];
+        elementList[indexTwo] = tempElement;
     }
 }

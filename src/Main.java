@@ -21,7 +21,7 @@ public class Main extends Application {
     private final int windowWidth = 1530;
 
     // Number of colored bars to sort
-    private int numElements = 1530;
+    private int numElements = 80;
 
     // Main root of the scene as a Vertical Box
     private VBox root;
@@ -69,7 +69,7 @@ public class Main extends Application {
         bubbleSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 300);
+                Sorter sorter = new Sorter(elementList, sortSection, 7);
                 sorter.bubbleSort();
             }
         });
