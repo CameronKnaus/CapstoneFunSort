@@ -66,6 +66,19 @@ public class Sorter {
         backgroundThread.start();
     }
 
+    /**
+     * Updates pane containing all elements
+     */
+    private void updateList() {
+        // Clear current elements
+        sortSection.getChildren().clear();
+
+        // update all children elements to sort section (colored bars)
+        for (int i = 0; i < elementList.length; ++i) {
+            sortSection.getChildren().add(elementList[i].getBody());
+        }
+    }
+
     // Shuffle an array of elements
     private void runShuffle() {
         // Shuffle based on a random number
@@ -80,13 +93,7 @@ public class Sorter {
                     @Override
                     public void run()
                     {
-                        // Clear current elements
-                        sortSection.getChildren().clear();
-
-                        // update all children elements to sort section (colored bars)
-                        for (int i = 0; i < elementList.length; ++i) {
-                            sortSection.getChildren().add(elementList[i].getBody());
-                        }
+                        updateList();
                     }
                 });
 
@@ -116,13 +123,7 @@ public class Sorter {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                // Clear current elements
-                                sortSection.getChildren().clear();
-
-                                // update all children elements to sort section (colored bars)
-                                for (int i = 0; i < elementList.length; ++i) {
-                                    sortSection.getChildren().add(elementList[i].getBody());
-                                }
+                                updateList();
                             }
                         });
 
@@ -137,13 +138,7 @@ public class Sorter {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                // Clear current elements
-                sortSection.getChildren().clear();
-
-                // update all children elements to sort section (colored bars)
-                for (int i = 0; i < elementList.length; ++i) {
-                    sortSection.getChildren().add(elementList[i].getBody());
-                }
+                    updateList();
                 }
             });
         }
