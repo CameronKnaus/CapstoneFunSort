@@ -21,7 +21,7 @@ public class Main extends Application {
     private final int windowWidth = 1530;
 
     // Number of colored bars to sort
-    private int numElements = 80;
+    private int numElements = 30;
 
     // Main root of the scene as a Vertical Box
     private VBox root;

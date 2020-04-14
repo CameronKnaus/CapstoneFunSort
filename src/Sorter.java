@@ -133,6 +133,19 @@ public class Sorter {
                     }
                 }
             }
+            // The element list is now sorted. Refresh one more time to ensure all elements are properly displayed
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                // Clear current elements
+                sortSection.getChildren().clear();
+
+                // update all children elements to sort section (colored bars)
+                for (int i = 0; i < elementList.length; ++i) {
+                    sortSection.getChildren().add(elementList[i].getBody());
+                }
+                }
+            });
         }
         catch (InterruptedException e) {
             e.printStackTrace();
