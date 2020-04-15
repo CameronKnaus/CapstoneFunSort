@@ -10,10 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.lang.reflect.Array;
-
-
 public class Main extends Application {
 
     // window size parameters
@@ -88,10 +84,10 @@ public class Main extends Application {
             }
         });
 
-        /* Insertion Sort Button */
+        /* Merge Sort Button */
         Button mergeSort = new Button("Merge Sort");
 
-        // Set the insertion sort action
+        // Set the merge sort action
         mergeSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -100,11 +96,23 @@ public class Main extends Application {
             }
         });
 
+        /* Quick Sort Button */
+        Button quickSort = new Button("Quick Sort");
+
+        // Set the Quick sort action
+        quickSort.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Sorter sorter = new Sorter(elementList, sortSection, 15);
+                sorter.quickSort();
+            }
+        });
+
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
 
         // Create horizontal section for buttons
-        HBox actionSection = new HBox(shuffleButton, bubbleSort, insertionSort, mergeSort);
+        HBox actionSection = new HBox(shuffleButton, bubbleSort, insertionSort, mergeSort, quickSort);
 
         // Create a horizontal section (pane) for the sorting window
         // Note that panes allow for absolute positioning

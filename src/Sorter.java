@@ -115,6 +115,27 @@ public class Sorter {
     }
 
     /**
+     * User facing function to open a new thread for Quick sort operations
+     */
+    public void quickSort() {
+        // Create a runnable for shuffle (allows for multithreaded running)
+        Runnable task = new Runnable() {
+            public void run() {
+                runQuickSort(0, elementList.length - 1);
+            }
+        };
+
+        // Run the shuffle in the background thread
+        Thread backgroundThread = new Thread(task);
+
+        // Terminate the running thread if the application exits
+        backgroundThread.setDaemon(true);
+
+        // Start the thread
+        backgroundThread.start();
+    }
+
+    /**
      * Updates pane containing all elements
      */
     private void updateList() {
@@ -199,7 +220,7 @@ public class Sorter {
 
                 // Loop through all elements (one 'bubble')
                 for(int i = 0; i < elementList.length - 1; ++i) {
-                    if(elementList[i].getWeight() < elementList[i + 1].getWeight()) {
+                    if(elementList[i].getWeight() > elementList[i + 1].getWeight()) {
                         swap(i, i+1);
                         // Update Application thread after swap
                         Platform.runLater(new Runnable() {
@@ -287,6 +308,59 @@ public class Sorter {
 
             merge(left, middle, right);
         }
+    }
+
+    /**
+     * Performs merge sort on the element list. The GUI is updated on the main thread through runLater() calls
+     * Note that this is the recursive implementation of Quicksort as found here: https://www.geeksforgeeks.org/quick-sort/
+     * @param start The starting index of the current array set
+     * @param end The ending index of the current array set
+     */
+    private void runQuickSort(int start, int end) {
+        // Commence quick sort
+        if(start < end) {
+            // Set the partitioning index
+            int pi = partition(start, end);
+
+            // Seperately sort the elements before and after the partition
+            runQuickSort(start, pi - 1);
+            runQuickSort(pi + 1, end);
+        }
+    }
+
+    /**
+     * Helper function for quicksort. Returns a partitioning point between the two given indexes
+     * @param start The starting index of the current array section
+     * @param end The ending index of the current array section
+     * @return The index of the partitioning point
+     */
+    private int partition(int start, int end) {
+        int pivot = elementList[end].getWeight();
+
+        // Index of the smaller element
+        int i = (start - 1);
+
+        for(int j = start; j <= end - 1; ++j) {
+            // If the current element is smaller than the pivot
+            if(elementList[j].getWeight() < pivot) {
+                // Increment the index of the smaller pivot
+                ++i;
+
+                // Perform a swap
+                swap(i, j);
+
+                // Update the GUI
+                updateGUI();
+            }
+        }
+        // Perform last swap
+        swap(i + 1, end);
+
+        // Update the GUI
+        updateGUI();
+
+        // Return the pivot point
+        return (i + 1);
     }
 
     /**
