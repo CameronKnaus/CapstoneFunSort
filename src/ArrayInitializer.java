@@ -1,7 +1,7 @@
 /**
  *  A Standalone free function helper to initialize the data array to be sorted
  */
-public class ArrayInitializer {
+class ArrayInitializer {
     /**
      * initialize a new array of Element class objects for sorting and displaying JFX rectangles
      * @param numberOfElements The total number of desired elements in the array
@@ -9,7 +9,7 @@ public class ArrayInitializer {
      * @param displayHeight The height in pixels of the containing display window
      * @return returns an array of Element objects with the proper color and weights
      */
-    public static Element[] initialize(int numberOfElements, int displayWidth, int displayHeight) {
+    static Element[] initialize(int numberOfElements, int displayWidth, int displayHeight) {
         // Create the initial array
         Element[] elementList = new Element[numberOfElements];
 

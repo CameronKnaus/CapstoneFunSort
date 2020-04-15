@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
  *  The total number of elements to split the rainbow into will be calculated as
  *  1530 / numberOfElements
  */
-public class ColorGenerator
+class ColorGenerator
 {
     // RGB Values
     private int red = 255;
@@ -28,12 +28,12 @@ public class ColorGenerator
     }
 
     // Get the resulting rgb as a JavaFX Color variable
-    public Color getColor() {
+    Color getColor() {
         return Color.rgb(red, green, blue);
     }
 
     // Increments up by a factor of 'increment' to the next color in the rainbow
-    public void incrementColor() {
+    void incrementColor() {
         // Change is used for the amount to change between RGB values, also handles overflow
         double change = increment;
 

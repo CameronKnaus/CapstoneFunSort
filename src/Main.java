@@ -22,9 +22,6 @@ public class Main extends Application {
     // Main root of the scene as a Vertical Box
     private VBox root;
 
-    // View of the scene
-    private Node view;
-
     // The array to be sorted
     private Element[] elementList;
 
@@ -91,7 +88,7 @@ public class Main extends Application {
         mergeSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 15);
+                Sorter sorter = new Sorter(elementList, sortSection, 7);
                 sorter.mergeSort();
             }
         });
@@ -103,7 +100,7 @@ public class Main extends Application {
         quickSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 15);
+                Sorter sorter = new Sorter(elementList, sortSection, 7);
                 sorter.quickSort();
             }
         });
@@ -119,8 +116,8 @@ public class Main extends Application {
         sortSection = new Pane();
 
         // update all children elements to sort section (colored bars)
-        for(int i = 0; i < elementList.length; ++i) {
-            sortSection.getChildren().add(elementList[i].getBody());
+        for (Element element : elementList) {
+            sortSection.getChildren().add(element.getBody());
         }
 
         // Combine both HBox's into one Vertical box
@@ -142,9 +139,6 @@ public class Main extends Application {
 
         // Draw the scene to the stage
         stage.setScene(new Scene(createLayout()));
-
-        // Set the view of the scene to be that created in root
-        view = root;
 
         // Display screen
         stage.show();

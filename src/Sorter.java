@@ -7,7 +7,7 @@ import java.util.Random;
  * Sorter is a class that is responsible for handling all of the  functions involving
  * sorting operations / shuffles
  */
-public class Sorter {
+class Sorter {
 
     // Array of elements used for temporary access while sorting
     private Element[] elementList;
@@ -33,7 +33,7 @@ public class Sorter {
     /**
      * User facing function that opens a new thread to shuffle the element list
      */
-    public void shuffle() {
+    void shuffle() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
             public void run() {
@@ -54,7 +54,7 @@ public class Sorter {
     /**
      * User facing function to open a new thread for bubble sort operations
      */
-    public void bubbleSort() {
+    void bubbleSort() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
             public void run() {
@@ -75,7 +75,7 @@ public class Sorter {
     /**
      * User facing function to open a new thread for insertion sort operations
      */
-    public void insertionSort() {
+    void insertionSort() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
             public void run() {
@@ -96,7 +96,7 @@ public class Sorter {
     /**
      * User facing function to open a new thread for merge sort operations
      */
-    public void mergeSort() {
+    void mergeSort() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
             public void run() {
@@ -117,7 +117,7 @@ public class Sorter {
     /**
      * User facing function to open a new thread for Quick sort operations
      */
-    public void quickSort() {
+    void quickSort() {
         // Create a runnable for shuffle (allows for multithreaded running)
         Runnable task = new Runnable() {
             public void run() {
@@ -143,8 +143,8 @@ public class Sorter {
         sortSection.getChildren().clear();
 
         // update all children elements to sort section (colored bars)
-        for (int i = 0; i < elementList.length; ++i) {
-            sortSection.getChildren().add(elementList[i].getBody());
+        for (Element element : elementList) {
+            sortSection.getChildren().add(element.getBody());
         }
     }
 
@@ -162,8 +162,8 @@ public class Sorter {
                     sortSection.getChildren().clear();
 
                     // update all children elements to sort section (colored bars)
-                    for (int i = 0; i < elementList.length; ++i) {
-                        sortSection.getChildren().add(elementList[i].getBody());
+                    for (Element element : elementList) {
+                        sortSection.getChildren().add(element.getBody());
                     }
                 }
             });
