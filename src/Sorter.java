@@ -138,19 +138,6 @@ class Sorter {
     /**
      * Updates pane containing all elements
      */
-    private void updateList() {
-        // Clear current elements
-        sortSection.getChildren().clear();
-
-        // update all children elements to sort section (colored bars)
-        for (Element element : elementList) {
-            sortSection.getChildren().add(element.getBody());
-        }
-    }
-
-    /**
-     * Updates pane containing all elements
-     */
     private void updateGUI() {
         try {
             Platform.runLater(new Runnable()
@@ -186,22 +173,10 @@ class Sorter {
 
         // Randomly swap around elements
         for(int i = 0; i < elementList.length; ++i) {
-            try {
-                swap(i, rand.nextInt(elementList.length));
-                Platform.runLater(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        updateList();
-                    }
-                });
+            swap(i, rand.nextInt(elementList.length));
 
-                Thread.sleep(swapTime);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            // Update the GUI after swapping
+            updateGUI();
         }
     }
 
@@ -213,41 +188,24 @@ class Sorter {
         boolean unsorted = true;
 
         // Commence bubble sort
-        try {
-            while(unsorted) {
-                // Consider the list sorted until proven otherwise
-                unsorted = false;
+        while(unsorted) {
+            // Consider the list sorted until proven otherwise
+            unsorted = false;
 
-                // Loop through all elements (one 'bubble')
-                for(int i = 0; i < elementList.length - 1; ++i) {
-                    if(elementList[i].getWeight() > elementList[i + 1].getWeight()) {
-                        swap(i, i+1);
-                        // Update Application thread after swap
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateList();
-                            }
-                        });
+            // Loop through all elements (one 'bubble')
+            for(int i = 0; i < elementList.length - 1; ++i) {
+                if(elementList[i].getWeight() > elementList[i + 1].getWeight()) {
+                    swap(i, i+1);
 
-                        // Cause the thread to sleep if a swap was executed
-                        Thread.sleep(swapTime);
+                    // Update Application thread after swap
+                    updateGUI();
 
-                        unsorted = true;
-                    }
+                    unsorted = true;
                 }
             }
-            // The element list is now sorted. Refresh one more time to ensure all elements are properly displayed
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    updateList();
-                }
-            });
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // The element list is now sorted. Refresh one more time to ensure all elements are properly displayed
+        updateGUI();
     }
 
     /**
@@ -255,40 +213,18 @@ class Sorter {
      */
     private void runInsertionSort() {
         // Commence insertion sort
-        try {
-            for (int i = 1; i < elementList.length; ++i) {
-                int j = i;
-                while (j > 0 && elementList[j].getWeight() < elementList[j - 1].getWeight()) {
-                    swap(j, j - 1);
-                    j -= 1;
-                }
-                // Update the GUI
-                Platform.runLater(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        updateList();
-                    }
-                });
-
-                // Cause the thread to sleep if a swap was executed
-                Thread.sleep(swapTime);
+        for (int i = 1; i < elementList.length; ++i) {
+            int j = i;
+            while (j > 0 && elementList[j].getWeight() < elementList[j - 1].getWeight()) {
+                swap(j, j - 1);
+                j -= 1;
             }
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
+            // Update the GUI
+            updateGUI();
         }
 
         // One last GUI update to ensure all elements are accurately in place
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                updateList();
-            }
-        });
+        updateGUI();
     }
 
     /**
@@ -370,62 +306,39 @@ class Sorter {
      * @param end The end point of the sub array
      */
     private void merge(int start, int mid, int end) {
-        try {
-            int start2 = mid + 1;
+        int start2 = mid + 1;
 
-            // If the direct merge is already sorted
-            if (elementList[mid].getWeight() <= elementList[start2].getWeight()) {
-                return;
-            }
+        // If the direct merge is already sorted
+        if (elementList[mid].getWeight() <= elementList[start2].getWeight()) {
+            return;
+        }
 
-            // Two pointers to maintain start of both arrays to merge
-            while (start <= mid && start2 <= end) {
-                // If element 1 is in the right place
-                if (elementList[start].getWeight() <= elementList[start2].getWeight()) {
-                    ++start;
-                } else {
-                    int index = start2;
+        // Two pointers to maintain start of both arrays to merge
+        while (start <= mid && start2 <= end) {
+            // If element 1 is in the right place
+            if (elementList[start].getWeight() <= elementList[start2].getWeight()) {
+                ++start;
+            } else {
+                int index = start2;
 
-                    // Shift all the elements between element 1 and 2 right by one
-                    while (index != start) {
-                        swap(index, index - 1);
-                        --index;
-
-                        // Update the GUI
-                        Platform.runLater(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                updateList();
-                            }
-                        });
-
-                        // Cause the thread to sleep if a swap was executed
-                        Thread.sleep(swapTime);
-                    }
+                // Shift all the elements between element 1 and 2 right by one
+                while (index != start) {
+                    swap(index, index - 1);
+                    --index;
 
                     // Update the GUI
-                    Platform.runLater(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            updateList();
-                        }
-                    });
-
-                    // Update all the pointers
-                    ++start;
-                    ++mid;
-                    ++start2;
+                    updateGUI();
                 }
+
+                // Update the GUI
+                updateGUI();
+
+                // Update all the pointers
+                ++start;
+                ++mid;
+                ++start2;
             }
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     /**
