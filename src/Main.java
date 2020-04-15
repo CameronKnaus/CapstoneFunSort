@@ -105,11 +105,24 @@ public class Main extends Application {
             }
         });
 
+        /* Heap Sort Button */
+        Button heapSort = new Button("Heap Sort");
+
+        // Set the Quick sort action
+        heapSort.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Sorter sorter = new Sorter(elementList, sortSection, 7);
+                sorter.heapSort();
+            }
+        });
+
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
 
         // Create horizontal section for buttons
-        HBox actionSection = new HBox(shuffleButton, bubbleSort, insertionSort, mergeSort, quickSort);
+        HBox actionSection = new HBox(shuffleButton, bubbleSort,
+                insertionSort, mergeSort, quickSort, heapSort);
 
         // Create a horizontal section (pane) for the sorting window
         // Note that panes allow for absolute positioning

@@ -136,6 +136,27 @@ class Sorter {
     }
 
     /**
+     * User facing function to open a new thread for Heap sort operations
+     */
+    void heapSort() {
+        // Create a runnable for shuffle (allows for multithreaded running)
+        Runnable task = new Runnable() {
+            public void run() {
+                runHeapSort();
+            }
+        };
+
+        // Run the shuffle in the background thread
+        Thread backgroundThread = new Thread(task);
+
+        // Terminate the running thread if the application exits
+        backgroundThread.setDaemon(true);
+
+        // Start the thread
+        backgroundThread.start();
+    }
+
+    /**
      * Updates pane containing all elements
      */
     private void updateGUI() {
@@ -247,6 +268,48 @@ class Sorter {
     }
 
     /**
+     * Helper function that merges the pieces of merge sort
+     * @param start The starting point of the sub array
+     * @param mid The mid point of the sub array
+     * @param end The end point of the sub array
+     */
+    private void merge(int start, int mid, int end) {
+        int start2 = mid + 1;
+
+        // If the direct merge is already sorted
+        if (elementList[mid].getWeight() <= elementList[start2].getWeight()) {
+            return;
+        }
+
+        // Two pointers to maintain start of both arrays to merge
+        while (start <= mid && start2 <= end) {
+            // If element 1 is in the right place
+            if (elementList[start].getWeight() <= elementList[start2].getWeight()) {
+                ++start;
+            } else {
+                int index = start2;
+
+                // Shift all the elements between element 1 and 2 right by one
+                while (index != start) {
+                    swap(index, index - 1);
+                    --index;
+
+                    // Update the GUI
+                    updateGUI();
+                }
+
+                // Update the GUI
+                updateGUI();
+
+                // Update all the pointers
+                ++start;
+                ++mid;
+                ++start2;
+            }
+        }
+    }
+
+    /**
      * Performs merge sort on the element list. The GUI is updated on the main thread through runLater() calls
      * Note that this is the recursive implementation of Quicksort as found here: https://www.geeksforgeeks.org/quick-sort/
      * @param start The starting index of the current array set
@@ -300,45 +363,63 @@ class Sorter {
     }
 
     /**
-     * Helper function that merges the pieces of merge sort
-     * @param start The starting point of the sub array
-     * @param mid The mid point of the sub array
-     * @param end The end point of the sub array
+     * Performs heap sort on the element list. GUI is updated on the main thread through runLater()
+     * Code heavily influenced by this example: https://www.geeksforgeeks.org/heap-sort/
      */
-    private void merge(int start, int mid, int end) {
-        int start2 = mid + 1;
-
-        // If the direct merge is already sorted
-        if (elementList[mid].getWeight() <= elementList[start2].getWeight()) {
-            return;
+    private void runHeapSort() {
+        // Commence heap sort
+        int n = elementList.length;
+        // Build the heap (rearrange the array)
+        for(int i = n / 2 - 1; i >= 0; --i) {
+            heapify(n, i);
         }
 
-        // Two pointers to maintain start of both arrays to merge
-        while (start <= mid && start2 <= end) {
-            // If element 1 is in the right place
-            if (elementList[start].getWeight() <= elementList[start2].getWeight()) {
-                ++start;
-            } else {
-                int index = start2;
+        // One by one extract an element from heap
+        for(int i = n - 1; i>0; --i) {
+            // Move current root to the end
+            swap(0, i);
 
-                // Shift all the elements between element 1 and 2 right by one
-                while (index != start) {
-                    swap(index, index - 1);
-                    --index;
+            // Update GUI after swap
+            updateGUI();
 
-                    // Update the GUI
-                    updateGUI();
-                }
-
-                // Update the GUI
-                updateGUI();
-
-                // Update all the pointers
-                ++start;
-                ++mid;
-                ++start2;
-            }
+            // call max heapify on the reduced heap
+            heapify(i, 0);
         }
+    }
+
+    /**
+     * Helper function for heap sort; heapifies given the size of the heap and an index from the elementList
+     * @param heapSize The size of the heap
+     * @param index index of a node in the element List
+     */
+    private void heapify(int heapSize, int index) {
+        int largest = index;
+        int left = 2*index + 1;
+        int right = 2*index +2;
+
+        // If the left child is larger than the root
+        if(left < heapSize && elementList[left].getWeight() > elementList[largest].getWeight()) {
+            largest = left;
+        }
+
+        // If the right child is larger than the largest so far
+        if(right < heapSize && elementList[right].getWeight() > elementList[largest].getWeight()) {
+            largest = right;
+        }
+
+        // If largest is not the root
+        if(largest != index) {
+            swap(index, largest);
+
+            // Update main thread after swap
+            updateGUI();
+
+            // Recuresively call to heapify the affected subtree
+            heapify(heapSize, largest);
+        }
+
+        // If the right child
+
     }
 
     /**
