@@ -1,10 +1,17 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -17,7 +24,7 @@ public class Main extends Application {
     private final int windowWidth = 1530;
 
     // Number of colored bars to sort
-    private int numElements = 80;
+    private int numElements = 306;
 
     // Main root of the scene as a Vertical Box
     private VBox root;
@@ -76,7 +83,7 @@ public class Main extends Application {
         insertionSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 100);
+                Sorter sorter = new Sorter(elementList, sortSection, 7);
                 sorter.insertionSort();
             }
         });
@@ -85,24 +92,18 @@ public class Main extends Application {
         Button mergeSort = new Button("Merge Sort");
 
         // Set the merge sort action
-        mergeSort.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 7);
-                sorter.mergeSort();
-            }
+        mergeSort.setOnAction(e -> {
+            Sorter sorter = new Sorter(elementList, sortSection, 7);
+            sorter.mergeSort();
         });
 
         /* Quick Sort Button */
         Button quickSort = new Button("Quick Sort");
 
         // Set the Quick sort action
-        quickSort.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 7);
-                sorter.quickSort();
-            }
+        quickSort.setOnAction(e -> {
+            Sorter sorter = new Sorter(elementList, sortSection, 7);
+            sorter.quickSort();
         });
 
         /* Heap Sort Button */
@@ -117,12 +118,54 @@ public class Main extends Application {
             }
         });
 
+        // Array Size Combo Box
+        final ComboBox arraySize = new ComboBox();
+        arraySize.getItems().addAll(
+                "Very Small (10)",
+                "Small (30)",
+                "Medium (90)",
+                "Large (300)",
+                "Very Large (765)",
+                "Max (1530)"
+        );
+
+        // Add listener to update array size
+        arraySize.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue ov, String t, String t1) {
+                // Set actions for each option
+                if(t1.equals("Very Small (10)"))
+                    elementList = ArrayInitializer.initialize(10, windowWidth, windowHeight);
+                else if(t1.equals("Small (30)"))
+                    elementList = ArrayInitializer.initialize(30, windowWidth, windowHeight);
+                else if(t1.equals("Medium (90)"))
+                    elementList = ArrayInitializer.initialize(90, windowWidth, windowHeight);
+                else if(t1.equals("Large (300)"))
+                    elementList = ArrayInitializer.initialize(300, windowWidth, windowHeight);
+                else if(t1.equals("Very Large (765)"))
+                    elementList = ArrayInitializer.initialize(765, windowWidth, windowHeight);
+                else if(t1.equals("Max (1530)"))
+                    elementList = ArrayInitializer.initialize(1530, windowWidth, windowHeight);
+
+                // Clear the current elements from the GUI
+                sortSection.getChildren().clear();
+
+                // Update the gui with the current elements
+                for (Element element : elementList) {
+                    sortSection.getChildren().add(element.getBody());
+                }
+            }
+        });
+
+        arraySize.setValue("Array Size");
+
+
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
 
         // Create horizontal section for buttons
         HBox actionSection = new HBox(shuffleButton, bubbleSort,
-                insertionSort, mergeSort, quickSort, heapSort);
+                insertionSort, mergeSort, quickSort, heapSort, arraySize);
 
         // Create a horizontal section (pane) for the sorting window
         // Note that panes allow for absolute positioning
@@ -152,6 +195,7 @@ public class Main extends Application {
 
         // Draw the scene to the stage
         stage.setScene(new Scene(createLayout()));
+        stage.setResizable(false);
 
         // Display screen
         stage.show();

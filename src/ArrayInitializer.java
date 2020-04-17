@@ -2,6 +2,7 @@
  *  A Standalone free function helper to initialize the data array to be sorted
  */
 class ArrayInitializer {
+
     /**
      * initialize a new array of Element class objects for sorting and displaying JFX rectangles
      * @param numberOfElements The total number of desired elements in the array
