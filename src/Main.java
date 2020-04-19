@@ -35,6 +35,9 @@ public class Main extends Application {
     // Create a horizontal section (pane) for the sorting window (holds the elementList)
     private Pane sortSection;
 
+    // Time in milliseconds to delay between swaps
+    private int swapTime = 10;
+
     // Initial set up as main
     public static void main(String[] args) {
         // Connect to StyleSheet
@@ -71,7 +74,7 @@ public class Main extends Application {
         bubbleSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 7);
+                Sorter sorter = new Sorter(elementList, sortSection, swapTime);
                 sorter.bubbleSort();
             }
         });
@@ -83,7 +86,7 @@ public class Main extends Application {
         insertionSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 7);
+                Sorter sorter = new Sorter(elementList, sortSection, swapTime);
                 sorter.insertionSort();
             }
         });
@@ -93,7 +96,7 @@ public class Main extends Application {
 
         // Set the merge sort action
         mergeSort.setOnAction(e -> {
-            Sorter sorter = new Sorter(elementList, sortSection, 7);
+            Sorter sorter = new Sorter(elementList, sortSection, swapTime);
             sorter.mergeSort();
         });
 
@@ -102,7 +105,7 @@ public class Main extends Application {
 
         // Set the Quick sort action
         quickSort.setOnAction(e -> {
-            Sorter sorter = new Sorter(elementList, sortSection, 7);
+            Sorter sorter = new Sorter(elementList, sortSection, swapTime);
             sorter.quickSort();
         });
 
@@ -113,7 +116,7 @@ public class Main extends Application {
         heapSort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Sorter sorter = new Sorter(elementList, sortSection, 7);
+                Sorter sorter = new Sorter(elementList, sortSection, swapTime);
                 sorter.heapSort();
             }
         });
@@ -156,16 +159,48 @@ public class Main extends Application {
                 }
             }
         });
-
         arraySize.setValue("Array Size");
 
+        // Swap Speed Combo Box
+        final ComboBox swapSpeed = new ComboBox();
+        swapSpeed.getItems().addAll(
+                "Very Fast (5ms)",
+                "Fast (10ms)",
+                "Medium (25ms)",
+                "Slow (50ms)",
+                "Very Slow (100ms)",
+                "Slowest (300ms)"
+        );
+
+        // Add listener to update array size
+        swapSpeed.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue ov, String t, String t1) {
+                // Set actions for each option
+                if(t1.equals("Very Fast (5ms)"))
+                    swapTime = 5;
+                else if(t1.equals("Fast (10ms)"))
+                    swapTime = 10;
+                else if(t1.equals("Medium (25ms)"))
+                    swapTime = 25;
+                else if(t1.equals("Slow (50ms)"))
+                    swapTime = 50;
+                else if(t1.equals("Very Slow (100ms)"))
+                    swapTime = 100;
+                else if(t1.equals("Slowest (300ms)"))
+                    swapTime = 300;
+
+            }
+        });
+
+        swapSpeed.setValue("Swap Time");
 
         // Create root of the scene (returns as main parent scene)
         root = new VBox();
 
         // Create horizontal section for buttons
         HBox actionSection = new HBox(shuffleButton, bubbleSort,
-                insertionSort, mergeSort, quickSort, heapSort, arraySize);
+                insertionSort, mergeSort, quickSort, heapSort, arraySize, swapSpeed);
 
         // Create a horizontal section (pane) for the sorting window
         // Note that panes allow for absolute positioning

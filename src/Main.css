@@ -5,17 +5,23 @@
 .combo-box-base .list-cell
 {
     -fx-padding: 15 15 15 15;
-    -fx-background-radius: 8;
     -fx-background-color: #393e46;
     -fx-text-fill: #eeeeee;
     -fx-font-weight: bold;
     -fx-font-size: 1.1em;
-    -fx-skin: 'SortButtonSkin';
     -fx-border-style: solid;
     -fx-border-color: #393e46;
     -fx-border-width: 0 0 2px 0;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
+}
+.combo-box .arrow {
+    -fx-background-color: black;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: white;
+    -fx-size: 5;
 }
 .button
 {
